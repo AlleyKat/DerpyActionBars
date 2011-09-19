@@ -1,0 +1,16 @@
+﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="scripts\vars.lua"/>
+	<Script file="scripts\resetstyle.lua"/>
+	<Script file="scripts\hotkeysnames.lua"/>
+	<Script file="scripts\hoverbinds.lua"/>
+	<Script file="scripts\configframe.lua"/>
+	<Script file="scripts\gcd.lua"/>
+	<Script file="scripts\totems.lua"/>
+	<Script file="scripts\markbar.lua"/>
+	<Script file="scripts\micromenu.lua"/>
+	<Script file="scripts\swich.lua"/>
+	<Script file="scripts\exit.lua"/>
+	<Script file="scripts\post.lua"/>
+	<Script file="scripts\cc.lua"/>
+	<Script file="scripts\tullarange.lua"/>
+</Ui>
