@@ -1,6 +1,8 @@
 ﻿<Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="scripts\vars.lua"/>
-	<Script file="scripts\resetstyle.lua"/>
+	<Script file="scripts\reset.lua"/>
+	<Script file="scripts\statedriver.lua"/>
+	<Script file="scripts\style.lua"/>
 	<Script file="scripts\hotkeysnames.lua"/>
 	<Script file="scripts\hoverbinds.lua"/>
 	<Script file="scripts\configframe.lua"/>

@@ -15,7 +15,6 @@ local TULLARANGE_COLORS
 local ActionButton_GetPagedID = ActionButton_GetPagedID
 local ActionButton_IsFlashing = ActionButton_IsFlashing
 local ActionHasRange = ActionHasRange
-local IsActionInRange = IsActionInRange
 local IsUsableAction = IsUsableAction
 local HasAction = HasAction
 
@@ -30,9 +29,9 @@ M.addafter(function()
 	
 	if not TULLARANGE_COLORS then
 		TULLARANGE_COLORS = {
-		normal = {1, 1, 1},
-		oor = {1, 0.1, 0.1},
-		oom = {0.1, 0.3, 1},
+		[1] = {1, 0.1, 0.1}, -- oor
+		[2] = {1, 1, 1}, -- 'normal'
+		[3] = {0.1, 0.3, 1}, -- oom
 	}
 	end
 	tullaRange.colors = TULLARANGE_COLORS
@@ -68,14 +67,18 @@ function tullaRange:UpdateShown()
 	end
 end
 
-function tullaRange:UpdateButtons()
-	if not next(self.buttonsToUpdate) then
-		self:Hide()
-		return
-	end
+do
+	local next = next
+	local pairs = pairs
+	function tullaRange:UpdateButtons()
+		if not next(self.buttonsToUpdate) then
+			self:Hide()
+			return
+		end
 
-	for button in pairs(self.buttonsToUpdate) do
-		self:UpdateButton(button)
+		for button in pairs(self.buttonsToUpdate) do
+			self:UpdateButton(button)
+		end
 	end
 end
 
@@ -125,25 +128,31 @@ end
 
 --[[ Range Coloring ]]--
 
-function tullaRange.UpdateButtonUsable(button)
-	local action = ActionButton_GetPagedID(button)
-	local isUsable, notEnoughMana = IsUsableAction(action)
+do
+	local IsActionInRange = IsActionInRange
+	local ActionButton_GetPagedID = ActionButton_GetPagedID
+	local IsUsableAction = IsUsableAction
+	local tullaRange = tullaRange
+	function tullaRange.UpdateButtonUsable(button)
+		local action = ActionButton_GetPagedID(button)
+		local isUsable, notEnoughMana = IsUsableAction(action)
 
-	--usable
-	if isUsable then
-		--but out of range
-		if IsActionInRange(action) == 0 then
-			tullaRange.SetButtonColor(button, 'oor')
-		--in range
+		--usable
+		if isUsable then
+			--but out of range
+			if IsActionInRange(action) == 0 then
+				tullaRange.SetButtonColor(button, 1)
+			--in range
+			else
+				tullaRange.SetButtonColor(button, 2)
+			end
+		--out of mana
+		elseif notEnoughMana then
+			tullaRange.SetButtonColor(button, 3)
+		--unusable
 		else
-			tullaRange.SetButtonColor(button, 'normal')
+			tullaRange.ResetColorBack(button, 0)
 		end
-	--out of mana
-	elseif notEnoughMana then
-		tullaRange.SetButtonColor(button, 'oom')
-	--unusable
-	else
-		tullaRange.ResetColorBack(button, 'unusuable')
 	end
 end
 
@@ -153,7 +162,7 @@ function tullaRange.SetButtonColor(button, colorType)
 		local r, g, b = tullaRange:GetColor(colorType)
 		local icon =  _G[button:GetName() .. 'Icon']
 		if not button._derpy_mask then return end
-		if button.tullaRangeColor == 'normal' then 
+		if button.tullaRangeColor == 2 then 
 			button._derpy_mask:backcolor(0,0,0)
 			icon:SetGradient("VERTICAL",.5,.5,.5,1,1,1)
 		else
